@@ -1,5 +1,6 @@
-package petbook;
+package com.smirnova.petbook.repositories;
 
+import com.smirnova.petbook.entities.User;
 import org.springframework.data.repository.CrudRepository;
 
 

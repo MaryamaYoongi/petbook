@@ -1,9 +1,6 @@
-package petbook;
+package com.smirnova.petbook.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Pet {
@@ -16,6 +13,10 @@ public class Pet {
     private String petBreed;
     private String petType;
     private String petHobby;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "user_id", nullable = false)
+    private User owner;
 
     public String getPetGender() {
         return petGender;
@@ -73,5 +74,13 @@ public class Pet {
 
     public void setPetHobby(String petHobby) {
         this.petHobby = petHobby;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 }

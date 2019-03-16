@@ -1,9 +1,7 @@
-package petbook;
+package com.smirnova.petbook.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -13,6 +11,9 @@ public class User {
     private String userName;
     private String userAddress;
     private String userGender;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
+    private Set<Pet> pet;
 
     public String getUserGender() {
         return userGender;
@@ -48,4 +49,11 @@ public class User {
     }
 
 
+    public Set<Pet> getPet() {
+        return pet;
+    }
+
+    public void setPet(Set<Pet> pet) {
+        this.pet = pet;
+    }
 }

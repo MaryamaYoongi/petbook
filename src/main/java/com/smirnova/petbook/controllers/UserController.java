@@ -1,5 +1,7 @@
-package petbook;
+package com.smirnova.petbook.controllers;
 
+import com.smirnova.petbook.repositories.UserRepository;
+import com.smirnova.petbook.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
