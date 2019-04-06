@@ -1,11 +1,13 @@
 package com.smirnova.petbook.controllers;
 
-import com.smirnova.petbook.repositories.UserRepository;
 import com.smirnova.petbook.entities.User;
+import com.smirnova.petbook.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 
@@ -15,7 +17,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("add")
+    @PostMapping
     public @ResponseBody
     String addNewUser(@RequestParam String name
             , @RequestParam String address, @RequestParam String gender) {
@@ -29,28 +31,32 @@ public class UserController {
     }
 
     @GetMapping("all")
-    public @ResponseBody
-    Iterable<User> getAllUsers() {
-        return userRepository.findAll();
+    public String getAllUsers(Model model) {
+        model.addAttribute("users", userRepository.findAll());
+        return "profile";
     }
 
     @GetMapping("{userId}")
-    public @ResponseBody
-    Optional<User> getUser(@PathVariable int userId) {
-        if (userRepository.existsById(userId)) {
-            return userRepository.findById(userId);
+    public String getUser(@PathVariable int userId, Model model) throws IllegalAccessException {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            ArrayList<Object> users = new ArrayList<>();
+            users.add(userOptional.get());
+            model.addAttribute("users", users);
+            return "profile";
+        } else {
+            throw new IllegalAccessException("User not found!");
         }
-        return null;
     }
 
     @GetMapping("/delete/{userId}")
     public @ResponseBody
-    String deleteUser(@PathVariable int userId) {
+    String deleteUser(@PathVariable int userId) throws IllegalAccessException {
         if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);
             return "User " + userId + " has been successfully deleted.";
         } else {
-            return "There's no such user";
+            throw new IllegalAccessException("There's no such user!");
         }
     }
 
