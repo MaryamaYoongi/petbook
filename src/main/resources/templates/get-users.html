@@ -6,10 +6,10 @@
 </head>
 <body>
 <div th:each="user : ${users}">
-    <a th:href="@{'/user/' + ${user.getId()}}" th:text="'Id: ' + ${user.getId()}"/>
-    <p th:text="'Name: ' + ${user.getUserName()}"/>
-    <p th:text="'Address: ' + ${user.getUserAddress()}"/>
-    <p th:text="'Gender: ' + ${user.getUserGender()}"/>
+    <a th:href="@{'/user/' + ${user.getId()}}" th:text="'Id: ' + ${user.getId()}"></a>
+    <p th:text="'Name: ' + ${user.getUserName()}"></p>
+    <p th:text="'Address: ' + ${user.getUserAddress()}"></p>
+    <p th:text="'Gender: ' + ${user.getUserGender()}"></p>
     <br>
 </div>
 </body>

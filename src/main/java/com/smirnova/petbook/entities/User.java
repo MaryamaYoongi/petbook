@@ -23,7 +23,6 @@ public class User {
         this.userGender = userGender;
     }
 
-
     public Integer getId() {
         return userId;
     }
@@ -47,7 +46,6 @@ public class User {
     public void setUserAddress(String userAddress) {
         this.userAddress = userAddress;
     }
-
 
     public Set<Pet> getPet() {
         return pet;

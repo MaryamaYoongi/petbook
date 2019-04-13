@@ -18,14 +18,11 @@ public class Pet {
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;
 
-    public String getPetGender() {
-        return petGender;
-    }
+    public String getPetGender() { return petGender; }
 
     public void setPetGender(String petGender) {
         this.petGender = petGender;
     }
-
 
     public Integer getId() {
         return petId;
@@ -50,7 +47,6 @@ public class Pet {
     public void setPetAge(Integer petAge) {
         this.petAge = petAge;
     }
-
 
     public String getPetBreed() {
         return petBreed;
@@ -83,4 +79,13 @@ public class Pet {
     public void setOwner(User owner) {
         this.owner = owner;
     }
-}
+
+  //  @Override
+  //  public String toString() {
+
+ //       return MessageFormat.format(" Pet: {0}\n {1}",  this.petGender
+//        return this.petType;
+ //       return this.petBreed;
+ //       return this.petHobby;
+ //   }
+//}

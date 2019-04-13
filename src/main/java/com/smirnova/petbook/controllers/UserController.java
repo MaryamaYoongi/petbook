@@ -7,46 +7,47 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 
 @Controller
-@RequestMapping("user")
+@RequestMapping("users")
 public class UserController {
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
-
-    @PostMapping
-    public @ResponseBody
-    String addNewUser(@RequestParam String name
-            , @RequestParam String address, @RequestParam String gender) {
-
-        User n = new User();
-        n.setUserName(name);
-        n.setUserAddress(address);
-        n.setUserGender(gender);
-        userRepository.save(n);
-        return "Saved";
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    @GetMapping("all")
+    @GetMapping
     public String getAllUsers(Model model) {
         model.addAttribute("users", userRepository.findAll());
-        return "profile";
+        return "get-users";
     }
 
     @GetMapping("{userId}")
     public String getUser(@PathVariable int userId, Model model) throws IllegalAccessException {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
-            ArrayList<Object> users = new ArrayList<>();
-            users.add(userOptional.get());
-            model.addAttribute("users", users);
-            return "profile";
+            model.addAttribute("user", userOptional.get());
+            return "get-user";
         } else {
-            throw new IllegalAccessException("User not found!");
+            throw new IllegalArgumentException("User not found!");
         }
+    }
+
+    @PostMapping
+    public String addNewUser(User user) {
+        userRepository.save(user);
+
+        return "get-user";
+    }
+
+    @GetMapping("/form")
+    public String showAddUserPage(Model model) {
+        model.addAttribute("user", new User());
+        return "addUser";
     }
 
     @GetMapping("/delete/{userId}")
@@ -74,6 +75,9 @@ public class UserController {
         Optional<User> byId = userRepository.findById(userId);
         if (byId.isPresent()) {
             User user = byId.get();
+            user.setUserName(user.getUserName());
+            user.setUserAddress(user.getUserAddress());
+            user.setUserGender(user.getUserGender());
 
             user.setUserName(name);
             user.setUserAddress(address);

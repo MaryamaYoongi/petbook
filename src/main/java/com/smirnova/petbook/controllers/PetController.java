@@ -1,19 +1,18 @@
 package com.smirnova.petbook.controllers;
 
 import com.smirnova.petbook.entities.Pet;
-import com.smirnova.petbook.entities.User;
 import com.smirnova.petbook.repositories.PetRepository;
 import com.smirnova.petbook.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-import java.util.Set;
 
 
 @Controller
-@RequestMapping("pet")
+@RequestMapping("pets")
 public class PetController {
     private final PetRepository petRepository;
     private final UserRepository userRepository;
@@ -24,28 +23,22 @@ public class PetController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("add")
-    public @ResponseBody
-    String addNewPet(@RequestParam String name, @RequestParam String type,
-                     @RequestParam(required = false) String breed, @RequestParam(required = false) String hobby,
-                     @RequestParam Integer age, @RequestParam String gender, @RequestParam Integer userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            Pet k = new Pet();
-            setPet(name, age, gender, type, breed, hobby, k);
-            User owner = user.get();
-            Set<Pet> pets = owner.getPet();
-
-            pets.add(k);
-            userRepository.save(owner);
-        return "Saved";
+    @PostMapping
+    public String addNewPet(Pet pet) {
+            petRepository.save(pet);
+            return "get-pet";
         }
-        return null;
+
+    @GetMapping("/form")
+    public String showAddPetPage(Model model) {
+        model.addAttribute("pet", new Pet());
+        return "addPet";
     }
 
-    @GetMapping("all")
+    @GetMapping
     public @ResponseBody
     Iterable<Pet> getAllPets() {
+
         return petRepository.findAll();
     }
 
@@ -85,6 +78,12 @@ public class PetController {
         Optional<Pet> byId = petRepository.findById(petId);
         if (byId.isPresent()) {
             Pet pet = byId.get();
+            pet.setPetName(pet.getPetName());
+            pet.setPetAge(pet.getPetAge());
+            pet.setPetGender(pet.getPetGender());
+            pet.setPetType(pet.getPetType());
+            pet.setPetBreed(pet.getPetBreed());
+            pet.setPetHobby(pet.getPetHobby());
             setPet(name, age, gender, type, breed, hobby, pet);
             petRepository.save(pet);
             return pet;

@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+    <a th:href="@{'/pet/' + ${pet.getId()}}" th:text="'Id: ' + ${pet.getId()}"></a>
+    <p th:text="'Name: ' + ${pet}"></p>
+    <p th:text="'Age: ' + ${pet}"></p>
+    <p th:text="'Gender: ' + ${pet}"></p>
+    <p th:text="'Type: ' + ${pet}"></p>
+    <p th:text="'Breed: ' + ${pet}"></p>
+    <p th:text="'Hobby: ' + ${pet}"></p>
+    <br>
+</body>
+</html>
