@@ -6,13 +6,9 @@
 </head>
 <body>
 <div th:each="pet : ${pets}">
-    <a th:href="@{'/pet/' + ${pet.getId()}}" th:text="'Id: ' + ${pet.getId()}"></a>
-    <p th:text="'Name: ' + ${pet}"></p>
-    <p th:text="'Age: ' + ${pet}"></p>
-    <p th:text="'Gender: ' + ${pet}"></p>
-    <p th:text="'Type: ' + ${pet}"></p>
-    <p th:text="'Breed: ' + ${pet}"></p>
-    <p th:text="'Hobby: ' + ${pet}"></p>
+    <a th:href="@{'/pets/' + ${pet.getId()}}" th:text="'Id: ' + ${pet.getId()}"></a>
+    <p th:text="'Name: ' + ${pet.getPetName()}"></p>
+    <p th:text="'Type: ' + ${pet.getPetType()}"></p>
     <br>
 </div>
 </body>

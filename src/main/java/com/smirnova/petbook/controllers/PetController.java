@@ -1,6 +1,7 @@
 package com.smirnova.petbook.controllers;
 
 import com.smirnova.petbook.entities.Pet;
+import com.smirnova.petbook.entities.User;
 import com.smirnova.petbook.repositories.PetRepository;
 import com.smirnova.petbook.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,10 @@ public class PetController {
     }
 
     @PostMapping
-    public String addNewPet(Pet pet) {
-            petRepository.save(pet);
-            return "get-pet";
-        }
+    public String addPet(Pet pet) {
+        pet = petRepository.save(pet);
+        return "get-pet";
+    }
 
     @GetMapping("/form")
     public String showAddPetPage(Model model) {
@@ -36,20 +37,36 @@ public class PetController {
     }
 
     @GetMapping
-    public @ResponseBody
-    Iterable<Pet> getAllPets() {
+    public String  getAllPets(Model model) {
+        model.addAttribute("pets", petRepository.findAll());
 
-        return petRepository.findAll();
+        return "get-pets";
     }
 
-    @GetMapping("{petId}")
-    public @ResponseBody
-    Optional<Pet> getPet(@PathVariable int petId) {
+    @GetMapping("/{petId}")
+    public String getPet(@PathVariable int petId, Model model) {
         if (petRepository.existsById(petId)) {
-            return petRepository.findById(petId);
+            Pet pet = petRepository.findById(petId).get();
+            User owner = pet.getOwner();
+            model.addAttribute("user",owner);
+            model.addAttribute("pet", pet);
+            return "get-pet";
+        }else{
+            throw new IllegalArgumentException("Pet not found! Check another ID.");
         }
-        return null;
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     @GetMapping("/delete/{petId}")
     public @ResponseBody

@@ -1,6 +1,7 @@
 package com.smirnova.petbook.entities;
 
 import javax.persistence.*;
+import java.text.MessageFormat;
 
 @Entity
 public class Pet {
@@ -14,11 +15,13 @@ public class Pet {
     private String petType;
     private String petHobby;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;
 
-    public String getPetGender() { return petGender; }
+    public String getPetGender() {
+        return petGender;
+    }
 
     public void setPetGender(String petGender) {
         this.petGender = petGender;
@@ -80,12 +83,10 @@ public class Pet {
         this.owner = owner;
     }
 
-  //  @Override
-  //  public String toString() {
+    @Override
+    public String toString() {
 
- //       return MessageFormat.format(" Pet: {0}\n {1}",  this.petGender
-//        return this.petType;
- //       return this.petBreed;
- //       return this.petHobby;
- //   }
-//}
+        return MessageFormat.format("\n  Name: {0};\n  Type: {1};\n  Age: {2};\n",
+                this.petName, this.petType, this.petAge);
+    }
+}

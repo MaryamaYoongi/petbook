@@ -1,6 +1,8 @@
 package com.smirnova.petbook.controllers;
 
+import com.smirnova.petbook.entities.Pet;
 import com.smirnova.petbook.entities.User;
+import com.smirnova.petbook.repositories.PetRepository;
 import com.smirnova.petbook.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,15 +10,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.Set;
 
 
 @Controller
 @RequestMapping("users")
 public class UserController {
+    private final  PetRepository petRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, PetRepository petRepository) {
+        this.petRepository = petRepository;
         this.userRepository = userRepository;
     }
 
@@ -26,19 +31,21 @@ public class UserController {
         return "get-users";
     }
 
-    @GetMapping("{userId}")
+    @GetMapping("/{userId}")
     public String getUser(@PathVariable int userId, Model model) throws IllegalAccessException {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
+            Set<Pet> pet = userOptional.get().getPets();
             model.addAttribute("user", userOptional.get());
+            model.addAttribute("pet",pet);
             return "get-user";
         } else {
-            throw new IllegalArgumentException("User not found!");
+            throw new IllegalArgumentException("User not found! Check another ID.");
         }
     }
 
     @PostMapping
-    public String addNewUser(User user) {
+    public String addUser(User user) {
         userRepository.save(user);
 
         return "get-user";
@@ -50,12 +57,15 @@ public class UserController {
         return "addUser";
     }
 
+
+
     @GetMapping("/delete/{userId}")
-    public @ResponseBody
-    String deleteUser(@PathVariable int userId) throws IllegalAccessException {
-        if (userRepository.existsById(userId)) {
-            userRepository.deleteById(userId);
-            return "User " + userId + " has been successfully deleted.";
+    public String deleteUser(@PathVariable int userId, Model model) throws IllegalAccessException {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            userRepository.deleteById(user.getId());
+            return "redirect:/users";
         } else {
             throw new IllegalAccessException("There's no such user!");
         }

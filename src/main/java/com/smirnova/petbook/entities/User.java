@@ -47,11 +47,9 @@ public class User {
         this.userAddress = userAddress;
     }
 
-    public Set<Pet> getPet() {
-        return pet;
-    }
+    public Set<Pet> getPets() { return pet; }
 
-    public void setPet(Set<Pet> pet) {
+    public void setPets(Set<Pet> pet) {
         this.pet = pet;
     }
 }
