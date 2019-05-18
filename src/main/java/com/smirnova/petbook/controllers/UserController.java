@@ -5,7 +5,6 @@ import com.smirnova.petbook.entities.User;
 import com.smirnova.petbook.repositories.PetRepository;
 import com.smirnova.petbook.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.support.NullValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("mainPage")
-    public String getMainPage(Model model){
+    public String getMainPage(Model model) {
         return "main-page";
     }
 
@@ -40,17 +39,32 @@ public class UserController {
     public String getUser(@PathVariable int userId, Model model) throws IllegalAccessException {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
-            model.addAttribute("user", userOptional.get());
-            return "get-user";
+            User user = userOptional.get();
+            model.addAttribute("user", user);
+            if (user.getPet().isEmpty()) {
+                return "get-user-with-no-pets";
+            } else {
+                Pet pet = (Pet) user.getPet();
+                model.addAttribute("pet", pet);
+                return "get-user";
+            }
         } else {
             throw new IllegalArgumentException("User not found! Check another ID.");
         }
     }
+    
+    @GetMapping("users/{userId}/userPets")
+    public String getUserPets(@PathVariable int userId, Model model){
+        User user = userRepository.findById(userId).get();
+                                                                                             //for each!!!!!!!!!!!!!!!!!
+        model.addAttribute("pets",pets);
+        return "get-user-pets";
+    }
 
     @PostMapping
-    public String addUser(User user) {
-        userRepository.save(user);
-
+    public String addUser(User user, Model model) {
+        user = userRepository.save(user);
+        model.addAttribute("user", user);
         return "get-user";
     }
 
@@ -62,12 +76,12 @@ public class UserController {
 
 
     @GetMapping("/delete/{userId}")
-    public String deleteUser(@PathVariable int userId, Model model) throws IllegalAccessException {
+    public String deleteUser(@PathVariable int userId) throws IllegalAccessException {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            if (!user.getPets().getPetName().isEmpty()) {
-                Pet pet = (Pet) userOptional.get().getPets();
+            if (!user.getPet().isEmpty()) {
+                Pet pet = (Pet) userOptional.get().getPet();
                 petRepository.delete(pet);
             }
             userRepository.delete(user);
@@ -83,11 +97,6 @@ public class UserController {
         petRepository.deleteAll();
         return "deleted";
     }
-
-
-
-
-
 
 
     @GetMapping("update/{userId}")

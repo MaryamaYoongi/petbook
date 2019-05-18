@@ -1,7 +1,6 @@
 package com.smirnova.petbook.controllers;
 
 import com.smirnova.petbook.entities.Pet;
-import com.smirnova.petbook.entities.User;
 import com.smirnova.petbook.repositories.PetRepository;
 import com.smirnova.petbook.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,9 @@ public class PetController {
     }
 
     @PostMapping
-    public String addPet(Pet pet) {
+    public String addPet(Pet pet, Model model) {
         pet = petRepository.save(pet);
+        model.addAttribute("pet", pet);
         
         return "get-pet";
     }

@@ -13,7 +13,7 @@ public class User {
     private String userGender;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
-    private Pet pet;
+    private Set<Pet> pet;
 
     public String getUserGender() {
         return userGender;
@@ -47,9 +47,12 @@ public class User {
         this.userAddress = userAddress;
     }
 
-    public Pet getPets() { return pet; }
 
-    public void setPets(Pet pet) {
+    public Set<Pet> getPet() {
+        return pet;
+    }
+
+    public void setPet(Set<Pet> pet) {
         this.pet = pet;
     }
 }
