@@ -27,6 +27,7 @@ public class PetController {
     @PostMapping
     public String addPet(Pet pet) {
         pet = petRepository.save(pet);
+        
         return "get-pet";
     }
 
@@ -47,8 +48,6 @@ public class PetController {
     public String getPet(@PathVariable int petId, Model model) {
         if (petRepository.existsById(petId)) {
             Pet pet = petRepository.findById(petId).get();
-            User owner = pet.getOwner();
-            model.addAttribute("user",owner);
             model.addAttribute("pet", pet);
             return "get-pet";
         }else{
@@ -77,13 +76,6 @@ public class PetController {
         } else {
             return "There's no such pet";
         }
-    }
-
-    @GetMapping("deleteAll")
-    public @ResponseBody
-    String deleteAllPets() {
-        petRepository.deleteAll();
-        return "All pets have been deleted successfully.";
     }
 
     @GetMapping("update/{petId}")

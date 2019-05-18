@@ -5,24 +5,29 @@ import com.smirnova.petbook.entities.User;
 import com.smirnova.petbook.repositories.PetRepository;
 import com.smirnova.petbook.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.support.NullValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-import java.util.Set;
 
 
 @Controller
 @RequestMapping("users")
 public class UserController {
-    private final  PetRepository petRepository;
+    private final PetRepository petRepository;
     private final UserRepository userRepository;
 
     @Autowired
     public UserController(UserRepository userRepository, PetRepository petRepository) {
         this.petRepository = petRepository;
         this.userRepository = userRepository;
+    }
+
+    @GetMapping("mainPage")
+    public String getMainPage(Model model){
+        return "main-page";
     }
 
     @GetMapping
@@ -35,9 +40,7 @@ public class UserController {
     public String getUser(@PathVariable int userId, Model model) throws IllegalAccessException {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
-            Set<Pet> pet = userOptional.get().getPets();
             model.addAttribute("user", userOptional.get());
-            model.addAttribute("pet",pet);
             return "get-user";
         } else {
             throw new IllegalArgumentException("User not found! Check another ID.");
@@ -58,13 +61,16 @@ public class UserController {
     }
 
 
-
     @GetMapping("/delete/{userId}")
     public String deleteUser(@PathVariable int userId, Model model) throws IllegalAccessException {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            userRepository.deleteById(user.getId());
+            if (!user.getPets().getPetName().isEmpty()) {
+                Pet pet = (Pet) userOptional.get().getPets();
+                petRepository.delete(pet);
+            }
+            userRepository.delete(user);
             return "redirect:/users";
         } else {
             throw new IllegalAccessException("There's no such user!");
@@ -72,11 +78,17 @@ public class UserController {
     }
 
     @GetMapping("deleteAll")
-    public @ResponseBody
-    String deleteAllUsers() {
+    public String deleteAllUsers(Model model) {
         userRepository.deleteAll();
-        return "All users have been deleted successfully.";
+        petRepository.deleteAll();
+        return "deleted";
     }
+
+
+
+
+
+
 
     @GetMapping("update/{userId}")
     public @ResponseBody
