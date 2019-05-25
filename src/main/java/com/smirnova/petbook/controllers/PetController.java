@@ -1,6 +1,7 @@
 package com.smirnova.petbook.controllers;
 
 import com.smirnova.petbook.entities.Pet;
+import com.smirnova.petbook.entities.User;
 import com.smirnova.petbook.repositories.PetRepository;
 import com.smirnova.petbook.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +24,21 @@ public class PetController {
         this.userRepository = userRepository;
     }
 
-    @PostMapping
-    public String addPet(Pet pet, Model model) {
+    @PostMapping("{userId}")
+    public String addPet(@ModelAttribute Pet pet, @PathVariable Integer userId, Model model) {
+        User user = userRepository.findById(userId).get();
+        pet.setOwner(user);
         pet = petRepository.save(pet);
         model.addAttribute("pet", pet);
         
         return "get-pet";
     }
 
-    @GetMapping("/form")
-    public String showAddPetPage(Model model) {
+    @GetMapping("/{userId}/form")
+    public String showAddPetPage(@PathVariable int userId, Model model) {
         model.addAttribute("pet", new Pet());
+        model.addAttribute("userId",userId);
+
         return "addPet";
     }
 

@@ -9,23 +9,19 @@
     <p th:text="'Name: ' + ${user.getUserName()}"></p>
     <p th:text="'Address: ' + ${user.getUserAddress()}"></p>
     <p th:text="'Gender: ' + ${user.getUserGender()}"></p>
-    <p th:href="@{'/users/' + ${user.getId()} + '/userPets'}">Pets:</p>
-    <p th:text="'.......Name -  '  + ${user.getPet()}"></p>
-    <p th:text="'.......Type -  '  + ${user.getPet()}"></p>
-    <p th:text="'.......Age -  '  + ${user.getPet()}"></p>
-    <p> </p>
-    <p> </p>
-    <a th:href="@{'/pets/form'}">add pet</a>
-    <p> </p>
-    <a th:href="@{'/users'}">to all users</a>
+    <div style="height:20px"></div>
+    <a th:href="@{'/users/' + ${user.getId()} + '/userPets'}">View all user's pets</a>
+    <div style="height:30px"></div>
+    <a th:href="@{'/pets/' + ${user.getId()} + '/form'}">add new pet</a>
+    <div style="height:50px"></div>
+    <a th:href="@{'/users'}">see other users</a>
     <p> </p>
     <a th:href="@{'/pets'}">to all pets</a>
     <p> <p>
     <a th:href="@{'/users/update/' + ${user.getId()}}">change information</a>
     <p> </p>
     <a th:href="@{'/users/delete/'  + ${user.getId()}}">delete this user (and pets)</a>
-    <p> </p>
-    <p> </p>
+    <div style="height:20px"></div>
     <a th:href="@{'/users/mainPage'}">go to the main page</a>
 <br>
 </body>

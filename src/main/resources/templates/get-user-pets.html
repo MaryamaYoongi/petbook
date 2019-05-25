@@ -11,8 +11,13 @@
     <p th:text="'Type: ' + ${pet.getPetType()}"></p>
     <br>
 </div>
-<a th:href="@{'/users'}"> to all users</a>
 <p> </p>
+<a th:href="@{'/users/' + ${pets.iterator().next().getOwner().getId()}}"> return to user</a>
+<div style="height:50px"></div>
+<a th:href="@{'/pets'}"> see other pets</a>
+<p> </p>
+<a th:href="@{'/users'}"> to all users</a>
+<div style="height:20px"></div>
 <a th:href="@{'/users/mainPage'}"> go to the main page</a>
 </body>
 </html>

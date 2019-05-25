@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.Set;
 
 
 @Controller
@@ -44,7 +45,7 @@ public class UserController {
             if (user.getPet().isEmpty()) {
                 return "get-user-with-no-pets";
             } else {
-                Pet pet = (Pet) user.getPet();
+                Set pet = petRepository.findAllByOwner(user);
                 model.addAttribute("pet", pet);
                 return "get-user";
             }
@@ -53,11 +54,11 @@ public class UserController {
         }
     }
     
-    @GetMapping("users/{userId}/userPets")
+    @GetMapping("{userId}/userPets")
     public String getUserPets(@PathVariable int userId, Model model){
         User user = userRepository.findById(userId).get();
-                                                                                             //for each!!!!!!!!!!!!!!!!!
-        model.addAttribute("pets",pets);
+        Set pets = petRepository.findAllByOwner(user);
+        model.addAttribute("pets", pets);
         return "get-user-pets";
     }
 
@@ -65,7 +66,7 @@ public class UserController {
     public String addUser(User user, Model model) {
         user = userRepository.save(user);
         model.addAttribute("user", user);
-        return "get-user";
+        return "get-user-with-no-pets";
     }
 
     @GetMapping("/form")

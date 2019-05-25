@@ -12,10 +12,11 @@
     <p th:text="'Gender: ' + ${pet.getPetGender()}"></p>
     <p th:text="'Breed: ' + ${pet.getPetBreed()}"></p>
     <p th:text="'Hobby: ' + ${pet.getPetHobby()}"></p>
-    <a th:href="@{'/users/' + ${pet.getOwner().getId()}}" th:text="'Owner: ' + ${pet.getOwner().getId()}"></a>
-    <p> </p>
-    <a th:href="@{'/pets'}"> to all pets</a>
-    <p> </p>
+    <p></p>
+    <a th:href="@{'/users/' + ${pet.getOwner().getId()}}" th:text="'Owner: ' + ${pet.getOwner().getUserName()}"></a>
+    <div style="height:50px"></div>
+    <a th:href="@{'/pets'}"> see other pets</a>
+    <div style="height:20px"></div>
     <a th:href="@{'/users/mainPage'}"> go to the main page</a>
     <br>
 </body>
