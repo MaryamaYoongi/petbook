@@ -2,15 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Getting Started: Handling Form Submission</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
 <h1>Add user</h1>
 <form action="#" th:action="@{/users}" th:object="${user}" method="post">
-    <p>Name: <input type="text" th:field="*{userName}" /></p>
+    <div class="form-group row">
+        <label for="inputPassword" class="offset-sm-3 col-sm-2 col-form-label">Name</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="inputPassword" th:field="*{userName}"  placeholder="name">
+        </div>
+    </div>
     <p>Address: <input type="text" th:field="*{userAddress}" /></p>
     <p>Gender: <input type="text" th:field="*{userGender}" /></p>
-    <p><input type="submit" value="Submit" /></p>
+    <button type="submit" class="btn btn-primary">Submit</button>
     <div style="height:50px"></div>
     <a th:href="@{'/users/mainPage'}">go to the main page</a>
 </form>
